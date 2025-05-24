@@ -36,11 +36,34 @@ interface NotebookContextValue {
     functionIndex: number,
     testIndex: number
   ) => void;
+
+  clear: () => void;
 }
 
 // 1. Create the Context
 const NotebookContext = createContext<NotebookContextValue>(null as any); // Or an initial state object
 
+const TEST_SUM: Notebook = {
+  custom_variable: `globalThis.a = 10;
+globalThis.b = 20;
+globalThis.c = -1;`,
+  custom_functions: [
+    {
+      code: "globalThis.add = (x, y) => x + y;",
+      tests: [`return add(1,2);`, `return add(a,b)`],
+      test_outputs: [],
+    },
+    {
+      code: "globalThis.sub = (x, y) => x - y;",
+      tests: [`return sub(a,b);`],
+      test_outputs: [],
+    },
+  ],
+  steps: [
+    { code: `c = add(a,b)`, tests: [`return c`], test_outputs: [] },
+    { code: `c += sub(b,a)`, tests: [`return c`], test_outputs: [] },
+  ],
+};
 const TEST_EMPTY: Notebook = {
   custom_variable: ``,
   custom_functions: [{ code: "", tests: [""], test_outputs: [] }],
@@ -172,6 +195,11 @@ export const NotebookProvider = ({
   };
   //#endregion
 
+  const clear = () => {
+    // localStorage.removeItem("auto-saved-notebook");
+    setNootbook(TEST_SUM);
+  };
+
   useEffect(() => {
     localStorage.setItem("auto-saved-notebook", JSON.stringify(notebook));
   }, [notebook]);
@@ -190,6 +218,8 @@ export const NotebookProvider = ({
     addNewTest,
     onTestChanged,
     runFunctionTest,
+
+    clear,
   };
 
   return (

@@ -1,11 +1,11 @@
 Features:
-    - Auto-Save
-    - Github published
-    - Import/Export
-    - Run all button
+    - {X} Auto-Save
+    - {X} Github published
     - MathJS
+    - Run all button
     - Results page
     - Shareable results page
+    - Import/Export
 
 
 Refactoring:
